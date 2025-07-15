@@ -6,6 +6,7 @@ __pycache__/
 #NEW
 archive/
 test.py
+post_proc_images/
 
 # C extensions
 *.so
