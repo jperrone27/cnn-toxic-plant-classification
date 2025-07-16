@@ -7,6 +7,9 @@ __pycache__/
 archive/
 test.py
 post_proc_images/
+log_files/
+best_models/
+overfit_models/
 
 # C extensions
 *.so
