@@ -9,11 +9,10 @@ from keras.optimizers import Adam, SGD, RMSprop, schedules
 from keras.models import Model
 from keras.callbacks import CSVLogger, ReduceLROnPlateau
 from keras.applications import ResNet50, MobileNet, EfficientNetB7, efficientnet, resnet, inception_v3
-from tensorflow.keras.preprocessing.image import ImageDataGenerator
+from keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
-import tensorflow as tf
 import visualkeras
-from tensorflow.keras import layers
+from keras import layers
 from collections import defaultdict
 import os
 
