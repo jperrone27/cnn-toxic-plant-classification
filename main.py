@@ -30,12 +30,8 @@ if __name__ == "__main__":
     get_gpu_info()
 
 
-    """import image data and split"""
     start = time.time()
     paff = os.getcwd() + '/archive/tpc-imgs/'
-
-    x_train, y_train, x_test, y_test, val_tuple, img_res = import_image_data(paff, img_res, color2)
-    print('test size= ', len(x_test), '\n', 'train size= ', len(x_train))
 
 
     """Configure model hyperparameters and image preprocessing"""
@@ -55,6 +51,10 @@ if __name__ == "__main__":
     drop = 0.3
     unfrz = 30
 
+
+    """import image data and split"""
+    x_train, y_train, x_test, y_test, val_tuple, img_res = import_image_data(paff, img_res, color)
+    print('test size= ', len(x_test), '\n', 'train size= ', len(x_train))
 
     """train, validate, and test CNN model"""
     logfile = "inv3"
