@@ -9,7 +9,7 @@ from keras.optimizers import Adam, SGD, RMSprop, schedules
 from keras.models import Model
 from keras.callbacks import CSVLogger, ReduceLROnPlateau
 from keras.applications import InceptionV3, MobileNet, EfficientNetB7, efficientnet, inception_v3
-from keras.preprocessing.image import ImageDataGenerator
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
 from sklearn.model_selection import train_test_split
 import time
 import visualkeras
@@ -18,9 +18,12 @@ from collections import defaultdict
 import os
 
 from preprocess_data import import_image_data
+from preprocess_subset import import_data_subset
 from nvidia_gpu_info import get_gpu_info, get_system_memory 
 from toxicity_classifier_InceptionNetV3 import run_model_InceptionV3 
 from toxicity_classifier_RESNET import run_model_ResNet50
+from species_classifier_INETV3 import multiclass_INETV3
+from preprocess_multiclass import import_multiclass_data
 
 
 if __name__ == "__main__":
@@ -45,23 +48,35 @@ if __name__ == "__main__":
 
     color = 'grayscale' 
     color2 = 'rgb'
-    img_res = 200 
+    img_res = 150 
 
     batch = 32 
-    drop = 0.3
-    unfrz = 30
+    drop = 0.5
+    unfrz = 30 
 
+    epochs = 100
 
-    """import image data and split"""
-    x_train, y_train, x_test, y_test, val_tuple, img_res = import_image_data(paff, img_res, color)
+    """IMPORT FULL DATASET"""
+    # x_train, y_train, x_test, y_test, val_tuple, img_res = import_image_data(paff, img_res, color2)
+    # print('test size= ', len(x_test), '\n', 'train size= ', len(x_train))
+
+    x_train, y_train, x_test, y_test, val_tuple, img_res = import_multiclass_data(paff, img_res, color2)
     print('test size= ', len(x_test), '\n', 'train size= ', len(x_train))
 
-    """train, validate, and test CNN model"""
+
+    """IMPORT SUBSET OF DATASET"""
+    # x_train, y_train, x_test, y_test, val_tuple, img_res = import_data_subset(paff, "Virginia creeper", "Western Poison Oak", img_res, color2)
+    # print('test size= ', len(x_test), '\n', 'train size= ', len(x_train))
+
+
+    """train, validate, and test INCEPTIONNETV3 model"""
     logfile = "inv3"
-    run_model_InceptionV3(x_train, y_train, x_test, y_test, img_res, 100, validation= val_tuple, optim= optim, batch = batch , log_file_name= logfile, color = color2, unfrozen = unfrz, dropout = drop)
+    #BINARY
+    # run_model_InceptionV3(x_train, y_train, x_test, y_test, img_res, 1, validation= val_tuple, optim= optim, batch = batch , log_file_name= logfile, color = color2, unfrozen = unfrz, dropout = drop)
+    #CATEGORICAL
+    multiclass_INETV3(x_train, y_train, x_test, y_test, img_res, epochs, validation= val_tuple, optim= optim, batch = batch , log_file_name= logfile, color = color2, unfrozen = unfrz, dropout = drop)
 
-
-    """train, validate, and test CNN model"""
+    """train, validate, and test RESNET50 model"""
     # logfile = "resnet"
     # run_model_ResNet50(x_train, y_train, x_test, y_test, img_res, 100, validation= val_tuple, optim= optim, batch = batch , log_file_name= logfile, color = color2, unfrozen = unfrz, dropout = drop)
 
