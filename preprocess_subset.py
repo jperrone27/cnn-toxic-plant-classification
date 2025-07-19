@@ -15,13 +15,26 @@ from keras import layers
 from collections import defaultdict
 import os
 
+from toxicity_classifier_InceptionNetV3 import run_model_InceptionV3 
 
-def import_image_data(path, img_res=150, color = 'rgb', imgs_to_save=10):
+def import_data_subset(path, tox, nontox, img_res=150, color = 'rgb', imgs_to_save=10):
+
     """Load image data based on directories listed in CSV via Kaggle"""
 
     metafile = 'full_metadata.csv'  
     meta_data = pd.read_csv(path+metafile)
-    meta_data = meta_data[['slang','toxicity','path']]
+    # print(list(meta_data.columns))
+    # u = meta_data['slang'].unique()
+    # print(len(u))
+    # print(u)
+
+    filtered = meta_data[meta_data['slang'] == ( nontox or tox)]
+    # print(filtered.head())
+    # print(len(filtered))
+
+    # meta_data = meta_data[['slang','toxicity','path']]
+
+    meta_data = filtered[['slang','toxicity','path']]
 
     image_arr_list = []
     max_resolution = (0,0)
@@ -52,7 +65,7 @@ def import_image_data(path, img_res=150, color = 'rgb', imgs_to_save=10):
     print('\nmax resolution: ', max_resolution, '\nfile: ', max_res_file, '\n') #print max res
     new_col = (str(img_res) +'_res')
     meta_data[new_col] = image_arr_list
-    image_arr_list = [] #clear memory   
+    del image_arr_list #clear memory   
 
     # meta_data = meta_data.sample(len(meta_data)).reset_index(drop=True)
     training_df, testing_df = train_test_split(meta_data, test_size = 0.2, random_state=20) # stratify=[meta_data['toxicity']])
@@ -73,10 +86,11 @@ def import_image_data(path, img_res=150, color = 'rgb', imgs_to_save=10):
         os.makedirs(newdir, exist_ok=True)
         save_img(newdir + str(i) + ".png", img)
 
-        print(training_df.iloc[i, training_df.columns.get_loc("path")])    
+        # print(training_df.iloc[i, training_df.columns.get_loc("path")])    
 
         # print((training_df.iloc[i, training_df.columns.get_loc(new_col)]).shape)
 
     del meta_data, training_df, testing_df, valid_one #clear memory by removing dfs after to array
 
     return x_train, y_train, x_test, y_test, val_tuple, img_res
+    # return
