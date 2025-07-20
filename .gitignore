@@ -8,6 +8,7 @@ archive/
 test.py
 post_proc_images/
 log_files/
+notes.md
 
 
 # C extensions
