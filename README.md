@@ -14,14 +14,6 @@ The primary goal is to provide a framework for accessible identification technol
 ## Dataset Description
 The model was trained on a curated dataset of **9,952 images** (split 50/50 between toxic and nontoxic classes) sourced via Kaggle from iNaturalist. The dataset covers 10 distinct species:
 
-| **Toxic Species** (Label: 1) | **Nontoxic Lookalikes** (Label: 0) |
-| :--- | :--- |
-| Eastern Poison Ivy | Fragrant Sumac |
-| Western Poison Ivy | Virginia Creeper |
-| Eastern Poison Oak | Boxelder |
-| Western Poison Oak | Bear Oak |
-| Poison Sumac | Jack-in-the-pulpit |
-
 *Note: The dataset is included in `.gitignore` due to its size (10,000+ nested images).*
 
 ## Methodology
